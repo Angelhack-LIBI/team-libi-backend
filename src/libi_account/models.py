@@ -33,9 +33,9 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
     # Django User Configuration
     objects = AccountManager()
     USERNAME_FIELD = 'phone'
-    REQUIRED_FIELDS = ['name', 'phone', ]
+    REQUIRED_FIELDS = ['name', ]
 
-    phone = models.CharField(max_length=16, db_index=True, help_text="휴대전화번호")
+    phone = models.CharField(max_length=16, unique=True, help_text="휴대전화번호")
     name = models.CharField(max_length=64, help_text="이름")
 
     is_staff = models.BooleanField(null=False, default=False, help_text="관리자 여부")

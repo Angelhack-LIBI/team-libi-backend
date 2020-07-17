@@ -14,3 +14,4 @@ $RECYCLE.BIN/
 
 # Secret
 *.env
+db.sqlite3
