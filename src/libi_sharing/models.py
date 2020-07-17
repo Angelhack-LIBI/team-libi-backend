@@ -1,6 +1,6 @@
 from django.db import models
 
-from libi_common.models import BaseModel
+from libi_common.models import BaseModel, ImageMixin
 
 
 class Sharing(BaseModel):
@@ -34,17 +34,9 @@ class Area(BaseModel):
     name = models.CharField(max_length=100)
 
 
-class FileGroup(BaseModel):
-    funding = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
-    file = models.ForeignKey('File', null=True, on_delete=models.SET_NULL)
-
-
-class File(BaseModel):
-    extension = models.CharField(max_length=30)
-    file_type = models.CharField(max_length=10)
-    name = models.CharField(max_length=100)
-    path = models.CharField(max_length=200)
-    size = models.IntegerField(default=0)
+class SharingPhoto(BaseModel, ImageMixin):
+    FILE_UPLOAD_PATH = 'sharing_photo'
+    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
 
 
 class ApplyGroup(BaseModel):
