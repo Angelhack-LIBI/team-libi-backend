@@ -1,0 +1,16 @@
+# Python
+*.pyc
+__pycache__
+venv
+
+# IDE
+.idea
+
+# OS-Specific
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Secret
+*.env
