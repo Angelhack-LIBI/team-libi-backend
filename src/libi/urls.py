@@ -22,7 +22,7 @@ import libi_account.urls as account_urls
 import libi_sharing.urls as sharing_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('account/', include(account_urls, namespace='account_v1')),
-    path('sharing/', include(sharing_urls, namespace='sharing_v1')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('admin/', admin.site.urls),
+                  path('account/', include(account_urls, namespace='account_v1')),
+                  path('sharing/', include(sharing_urls, namespace='sharing_v1')),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
