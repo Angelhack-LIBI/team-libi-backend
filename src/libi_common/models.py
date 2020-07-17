@@ -4,6 +4,8 @@ import pendulum
 from django.conf import settings
 from django.db import models
 
+from libi_common.utils import generate_upload_path
+
 
 class SimpleBaseModel(models.Model):
     id = models.AutoField(primary_key=True)
