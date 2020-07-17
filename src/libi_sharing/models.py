@@ -6,7 +6,7 @@ from libi_common.models import BaseModel
 class Sharing(BaseModel):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    section = models.ForeignKey('Section', null=True, on_delete=models.SET_NULL)
+    area = models.ForeignKey('Area', null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
     created_account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
     goal_price = models.IntegerField()
@@ -25,12 +25,12 @@ class SharingOption(BaseModel):
     price = models.IntegerField()
 
 
-class SectionGroup(BaseModel):
+class AreaGroup(BaseModel):
     name = models.CharField(max_length=50)
 
 
-class Section(BaseModel):
-    section_group_id = models.ForeignKey('SectionGroup', on_delete=models.SET_NULL)
+class Area(BaseModel):
+    group = models.ForeignKey('libi_sharing.models.AreaGroup', on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
 
 
