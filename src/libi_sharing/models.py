@@ -30,7 +30,7 @@ class AreaGroup(BaseModel):
 
 
 class Area(BaseModel):
-    group = models.ForeignKey('libi_sharing.models.AreaGroup', on_delete=models.SET_NULL)
+    group = models.ForeignKey('AreaGroup', on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
 
 
