@@ -24,6 +24,11 @@ class StatelessAccount:
             is_staff=account.is_staff,
         )
 
+    @property
+    def is_authenticated(self):
+        # JWT 검증을 통해 반환된 Instance이므로 무조건 True를 반환
+        return True
+
 
 class TokenConfig:
     ISSUER = 'libi'
