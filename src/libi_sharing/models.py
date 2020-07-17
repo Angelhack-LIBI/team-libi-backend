@@ -9,7 +9,7 @@ class Sharing(BaseModel):
     section = models.ForeignKey('Section', null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
     created_account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
-    price = models.IntegerField(default=0)
+    price = models.IntegerField()
     sharing_type = models.IntegerField(blank=False, null=False)
 
 
@@ -26,7 +26,7 @@ class SharingOptionGroup(BaseModel):
 class SharingOption(BaseModel):
     description = models.CharField(blank=False, max_length=16)
     minimum_price = models.IntegerField(default=0)
-    price = models.IntegerField(default=0)
+    price = models.IntegerField()
 
 
 class SectionGroup(BaseModel):
