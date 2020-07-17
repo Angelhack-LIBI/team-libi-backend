@@ -30,7 +30,7 @@ class AreaGroup(BaseModel):
 
 
 class Area(BaseModel):
-    group = models.ForeignKey('AreaGroup', on_delete=models.SET_NULL)
+    group = models.ForeignKey('AreaGroup', null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
 
 

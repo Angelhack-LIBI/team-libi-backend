@@ -2,3 +2,4 @@ django==3.0.8
 djangorestframework==3.11.0
 pendulum==2.1.1
 pyjwt==1.7.1
+Pillow==7.2.0
