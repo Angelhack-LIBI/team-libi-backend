@@ -10,7 +10,7 @@ class Sharing(BaseModel):
     category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
     created_account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
     goal_price = models.IntegerField()
-    sharing_type = models.IntegerField(null=False)
+    sharing_type = models.IntegerField()
 
 
 class Category(BaseModel):
@@ -30,7 +30,7 @@ class SectionGroup(BaseModel):
 
 
 class Section(BaseModel):
-    section_group_id = models.ForeignKey('SectionGroup', null=False, on_delete=models.SET_NULL)
+    section_group_id = models.ForeignKey('SectionGroup', on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
 
 
