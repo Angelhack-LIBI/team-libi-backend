@@ -14,7 +14,7 @@ class TokenAuthentication(BaseAuthentication):
 
         try:
             payload = extract_access_token(access_token)
-            return payload.account, access_token
+            return payload.account, payload
 
         except (TokenExpiredError, TokenInvalidError):
             return None
