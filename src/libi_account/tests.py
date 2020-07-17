@@ -1,3 +1,4 @@
+from django.http.cookie import SimpleCookie
 from django.shortcuts import reverse
 from django.test import TestCase
 from rest_framework import status
@@ -98,3 +99,25 @@ class TokenRootViewTest(TestCase):
 
         token_row_exists = AccountToken.objects.filter(refresh_token=refresh_token, expire_at__gt=now()).exists()
         self.assertTrue(token_row_exists)
+
+    def test_token_refresh(self):
+        account_token = AccountToken.factory(self.account.id)
+        account_token.save()
+
+        client = APIClient()
+        client.cookies = SimpleCookie({'libi_refreshtoken': 'invalid'})
+
+        res = client.put(reverse('libi_account:token_root'))
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        client.cookies = SimpleCookie({'libi_refreshtoken': account_token.refresh_token})
+
+        res = client.put(reverse('libi_account:token_root'))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        access_token = res.data.get('access_token', '')
+        self.assertGreater(len(access_token), 1)
+
+        token_payload = extract_access_token(access_token)
+        self.assertIsInstance(extract_access_token(access_token), TokenPayload)
+        self.assertEqual(token_payload.account.id, self.account.id)
