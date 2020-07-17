@@ -18,5 +18,5 @@ class AccountCreateRequestSerializer(StatelessSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ('id', 'phone', 'created_time', 'updated_at',)
+        fields = ('id', 'phone', 'created_at', 'updated_at',)
         read_only_fields = ('id', 'phone', 'created_at', 'updated_at',)
