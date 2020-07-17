@@ -1,17 +1,15 @@
 from rest_framework import status
-from rest_framework.exceptions import APIException
-from rest_framework.response import Response
 from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from libi_account.errors import DuplicateAccountError
 from libi_account.serializers import (
     AccountCreateRequestSerializer, AccountSerializer
 )
 from libi_account.service import create_account
 
 
-class AccountRootView(APIView):
+class AccountView(APIView):
     def post(self, request: Request) -> Response:
         """
         계정 생성 API
@@ -25,3 +23,11 @@ class AccountRootView(APIView):
             data=response_serializer.data,
             status=status.HTTP_201_CREATED,
         )
+
+
+class TokenView(APIView):
+    def post(self, request: Request) -> Response:
+        pass
+
+    def put(self, request: Request) -> Response:
+        pass

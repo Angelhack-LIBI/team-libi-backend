@@ -26,7 +26,7 @@ class AccountRootViewTest(TestCase):
         """
         휴대전화번호 중복가입 방지 체크
         """
-        res = self.client.post(reverse('libi_account:account_root'), {
+        res = self.client.post(reverse('libi_account:account'), {
             'phone': self.account_data['phone'],
             'password': 'dontallowme',
         })
@@ -36,7 +36,7 @@ class AccountRootViewTest(TestCase):
         """
         가입 후 유저 생성 확인
         """
-        res = self.client.post(reverse('libi_account:account_root'), {
+        res = self.client.post(reverse('libi_account:account'), {
             'phone': '01099998888',
             'password': 'testtest',
         })
@@ -60,24 +60,24 @@ class TokenRootViewTest(TestCase):
         유효하지 않은 계정 토큰 발급 테스트
         """
         client = APIClient()
-        res = client.post(reverse('libi_account:token_root'), {
+        res = client.post(reverse('libi_account:token'), {
             'phone': '01011112222',
         })
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-        res = client.post(reverse('libi_account:token_root'), {
+        res = client.post(reverse('libi_account:token'), {
             'phone': '01011112222',
             'password': '   ',
         })
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-        res = client.post(reverse('libi_account:token_root'), {
+        res = client.post(reverse('libi_account:token'), {
             'phone': '     ',
             'password': 'password',
         })
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-        res = client.post(reverse('libi_account:token_root'), {
+        res = client.post(reverse('libi_account:token'), {
             'phone': self.account_data['phone'],
             'password': 'password',
         })
@@ -85,7 +85,7 @@ class TokenRootViewTest(TestCase):
 
     def test_token_generate(self):
         client = APIClient()
-        res = client.post(reverse('libi_account:token_root'), self.account_data)
+        res = client.post(reverse('libi_account:token'), self.account_data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         access_token = res.data.get('access_token', '')
@@ -107,12 +107,12 @@ class TokenRootViewTest(TestCase):
         client = APIClient()
         client.cookies = SimpleCookie({'libi_refreshtoken': 'invalid'})
 
-        res = client.put(reverse('libi_account:token_root'))
+        res = client.put(reverse('libi_account:token'))
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
         client.cookies = SimpleCookie({'libi_refreshtoken': account_token.refresh_token})
 
-        res = client.put(reverse('libi_account:token_root'))
+        res = client.put(reverse('libi_account:token'))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         access_token = res.data.get('access_token', '')
