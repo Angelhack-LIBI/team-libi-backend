@@ -6,9 +6,9 @@ from libi_common.models import BaseModel
 class Sharing(BaseModel):
     title = models.CharField(blank=False, max_length=200)
     description = models.TextField(blank=True)
-    section_id = models.ForeignKey('Section', null=True, on_delete=models.SET_NULL)
-    category_id = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
-    created_user_id = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
+    section = models.ForeignKey('Section', null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
+    created_account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
     price = models.IntegerField(default=0)
     sharing_type = models.IntegerField(blank=False, null=False)
 
@@ -19,8 +19,8 @@ class Category(BaseModel):
 
 
 class SharingOptionGroup(BaseModel):
-    sharing_id = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
-    sharing_option_id = models.ForeignKey('SharingOption', null=True, on_delete=models.SET_NULL)
+    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    sharing_option = models.ForeignKey('SharingOption', null=True, on_delete=models.SET_NULL)
 
 
 class SharingOption(BaseModel):
@@ -39,8 +39,8 @@ class Section(BaseModel):
 
 
 class FileGroup(BaseModel):
-    funding_id = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
-    file_id = models.ForeignKey('File', null=True, on_delete=models.SET_NULL)
+    funding = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    file = models.ForeignKey('File', null=True, on_delete=models.SET_NULL)
 
 
 class File(BaseModel):
@@ -52,12 +52,12 @@ class File(BaseModel):
 
 
 class ApplyGroup(BaseModel):
-    funding_id = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
-    apply_id = models.ForeignKey('Apply', null=True, on_delete=models.SET_NULL)
+    funding = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    apply = models.ForeignKey('Apply', null=True, on_delete=models.SET_NULL)
 
 
 class Apply(BaseModel):
-    user_id = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
+    account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
     funding_count = models.IntegerField(default=0)
     funding_price = models.IntegerField(default=0)
     state = models.CharField(blank=False, max_length=10)
