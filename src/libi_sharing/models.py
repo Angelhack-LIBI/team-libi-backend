@@ -39,13 +39,9 @@ class SharingPhoto(BaseModel, ImageMixin):
     sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
 
 
-class ApplyGroup(BaseModel):
-    funding = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
-    apply = models.ForeignKey('Apply', null=True, on_delete=models.SET_NULL)
-
-
-class Apply(BaseModel):
+class SharingApply(BaseModel):
     account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
-    funding_count = models.IntegerField(default=0)
-    funding_price = models.IntegerField(default=0)
-    state = models.CharField(max_length=10)
+    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    sharing_option = models.ForeignKey('SharingOption', null=True, on_delete=models.SET_NULL)
+    apply_amount = models.IntegerField()
+    apply_price = models.IntegerField()
