@@ -4,9 +4,9 @@ from typing import Dict
 import jwt
 import pendulum
 
-from libi_common.utils import now
-from libi_common.oauth.models import StatelessAccount, TokenConfig, TokenPayload
 from libi_common.oauth.errors import TokenExpiredError, TokenInvalidError
+from libi_common.oauth.models import StatelessAccount, TokenConfig, TokenPayload
+from libi_common.utils import now
 
 
 def generate_access_token(

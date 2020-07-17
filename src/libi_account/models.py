@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import secrets
-from dataclasses import dataclass
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
 from libi_common.models import BaseModel, SimpleBaseModel
 from libi_common.utils import now, datetime_to_pendulum
+from libi_common.oauth.models import StatelessAccount
+from libi_common.oauth.utils import generate_access_token
 
 
 class AccountManager(BaseUserManager):
@@ -53,11 +54,12 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
 class AccountToken(SimpleBaseModel):
     # Token Configuration
     REFRESH_TOKEN_EXPIRE_TIME = {'year': 1}
+    ACCESS_TOKEN_EXPIRE_TIME = {'hour': 1}
 
     account = models.ForeignKey('Account', on_delete=models.CASCADE, help_text='토큰 발급 계정')
     refresh_token = models.CharField(max_length=43, unique=True, help_text="RefreshToken")
-    refreshed_at = models.DateTimeField(auto_now_add=True, help_text="토큰 갱신 일시")
-    expire_at = models.DateTimeField(null=True, help_text="토큰 만료 일시")
+    refreshed_time = models.DateTimeField(auto_now_add=True, help_text="토큰 갱신 일시")
+    expire_time = models.DateTimeField(null=True, help_text="토큰 만료 일시")
 
     @property
     def is_active(self) -> bool:
@@ -74,7 +76,12 @@ class AccountToken(SimpleBaseModel):
     def issue_refresh_token(self) -> str:
         return secrets.token_urlsafe(32)
 
-    def issue_access_token(self):
-        # TODO: generate token
+    def issue_access_token(self) -> str:
+        token = generate_access_token(
+            StatelessAccount.from_stateful_account(self.account),
+            self.ACCESS_TOKEN_EXPIRE_TIME,
+            datetime_to_pendulum(self.expire_time)
+        )
         self.refreshed_at = now()
         self.save()
+        return token
