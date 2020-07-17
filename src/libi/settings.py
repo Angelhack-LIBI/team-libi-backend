@@ -24,7 +24,7 @@ SECRET_KEY = 'oprc=g8k)g$-zh0gc9!7z2*fvs_w!)jwpbv#wc_t+@nw%a51z5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', ]
 
 # Application definition
 DJANGO_APPS = [
@@ -72,6 +72,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'libi.wsgi.application'
 
+AUTH_USER_MODEL = 'libi_account.Account'
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -117,3 +119,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Rest Framework
+REST_FRAMEWORK = {
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'libi_common.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DATE_FORMAT': "%Y-%m-%d",
+    'TIME_FORMAT': "%H:%M:%S",
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S",
+}
