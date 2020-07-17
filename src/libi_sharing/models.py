@@ -6,7 +6,6 @@ from libi_common.models import BaseModel
 class Sharing(BaseModel):
     title = models.CharField(blank=False, max_length=200)
     description = models.TextField(blank=True)
-    unit_mapping_id = models.ForeignKey('libi_sharing.models.SharingOption', null=True, on_delete=models.SET_NULL)
     section_id = models.ForeignKey('Section', null=True, on_delete=models.SET_NULL)
     category_id = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
     created_user_id = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
@@ -17,6 +16,11 @@ class Sharing(BaseModel):
 class Category(BaseModel):
     title = models.CharField(blank=False, max_length=200)
     description = models.TextField(blank=True)
+
+
+class SharingOptionGroup(BaseModel):
+    sharing_id = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    sharing_option_id = models.ForeignKey('SharingOption', null=True, on_delete=models.SET_NULL)
 
 
 class SharingOption(BaseModel):
@@ -34,7 +38,7 @@ class Section(BaseModel):
     name = models.CharField(blank=False, max_length=100)
 
 
-class FIleGroup(BaseModel):
+class FileGroup(BaseModel):
     funding_id = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
     file_id = models.ForeignKey('File', null=True, on_delete=models.SET_NULL)
 
