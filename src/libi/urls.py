@@ -14,8 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+import libi_account.urls as account_urls
+import libi_sharing.urls as sharing_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('account/', include(account_urls, namespace='account_v1')),
+    path('sharing/', include(sharing_urls, namespace='sharing_v1')),
 ]
