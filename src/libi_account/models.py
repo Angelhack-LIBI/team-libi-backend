@@ -58,8 +58,8 @@ class AccountToken(SimpleBaseModel):
 
     account = models.ForeignKey('Account', on_delete=models.CASCADE, help_text='토큰 발급 계정')
     refresh_token = models.CharField(max_length=43, unique=True, help_text="RefreshToken")
-    refreshed_time = models.DateTimeField(auto_now_add=True, help_text="토큰 갱신 일시")
-    expire_time = models.DateTimeField(null=True, help_text="토큰 만료 일시")
+    refreshed_at = models.DateTimeField(auto_now_add=True, help_text="토큰 갱신 일시")
+    expire_at = models.DateTimeField(null=True, help_text="토큰 만료 일시")
 
     @property
     def is_active(self) -> bool:
@@ -80,7 +80,7 @@ class AccountToken(SimpleBaseModel):
         token = generate_access_token(
             StatelessAccount.from_stateful_account(self.account),
             self.ACCESS_TOKEN_EXPIRE_TIME,
-            datetime_to_pendulum(self.expire_time)
+            datetime_to_pendulum(self.expire_at)
         )
         self.refreshed_at = now()
         self.save()
