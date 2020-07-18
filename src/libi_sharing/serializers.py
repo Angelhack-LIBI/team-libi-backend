@@ -2,6 +2,7 @@ from typing import List
 
 from rest_framework import serializers
 
+from libi_account.models import Account
 from libi_common.serializers import StatelessSerializer
 from libi_sharing.models import (
     Area,
@@ -75,7 +76,7 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
         model = Sharing
         fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
         read_only_fields = (
-        'id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
+            'id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
 
     option = serializers.SerializerMethodField()
     photo_urls = serializers.SerializerMethodField()
@@ -85,7 +86,6 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
 
     def get_photo_urls(self, obj: Sharing) -> List[str]:
         urls = []
-        print(obj.photos)
         for photo in obj.photos.filter(deleted_at=None).all():
             url = photo.file.url if getattr(photo, 'file', None) else ''
             if url:
@@ -95,6 +95,12 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
 
 class SharingApplySerializer(StatelessSerializer):
     number = serializers.IntegerField(min_value=1)
+
+
+class SharingContactUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ('phone', 'name')
 
 
 class SharingApplyDetailSerializer(serializers.ModelSerializer):

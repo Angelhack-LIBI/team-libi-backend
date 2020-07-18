@@ -17,7 +17,7 @@ def create_sharing(sharing_type: int, area_id: int, title: str, category_id: int
     """
     with transaction.atomic():
         new_sharing = Sharing.objects.create(title=title, description=description, area_id=area_id, category_id=category_id,
-                                             created_account=created_account_id, goal_price=goal_price,
+                                             created_account_id=created_account_id, goal_price=goal_price,
                                              sharing_type=sharing_type)
         SharingOption.objects.create(sharing=new_sharing, description=option_description, price=option_price)
         for f in photo:

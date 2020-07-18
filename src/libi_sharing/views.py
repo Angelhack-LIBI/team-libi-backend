@@ -1,5 +1,6 @@
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,7 +14,7 @@ from libi_sharing.serializers import (
     SharingListItemSerializer,
     SharingCreateRequestSerializer,
     SharingDetailItemSerializer,
-    SharingApplyDetailSerializer, SharingApplySerializer)
+    SharingApplyDetailSerializer, SharingApplySerializer, SharingContactUserSerializer)
 from libi_sharing.service import create_sharing
 
 
@@ -50,10 +51,12 @@ class SharingRootView(APIView):
         """
         create Sharing
         """
+        if not request.user:
+            raise PermissionDenied()
+
         request_serializer = SharingCreateRequestSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         new_sharing = create_sharing(**request_serializer.validated_data, created_account_id=request.user.id)
-
         response_serializer = SharingDetailItemSerializer(new_sharing)
         return Response(
             data=response_serializer.data,
@@ -102,12 +105,15 @@ class SharingContactView(APIView):
     @swagger_auto_schema(
         operation_summary="재고할인 연락하기",
         response={
-            status.HTTP_200_OK: SharingApplyDetailSerializer,
+            status.HTTP_200_OK: SharingContactUserSerializer,
             status.HTTP_404_NOT_FOUND: APIErrorSerializer,
         }
     )
     def get(self, request: Request, sharing_id: int) -> Response:
-        pass
+        user = Sharing.objects.get(id=sharing_id).created_account
+        return Response(
+            SharingContactUserSerializer(user).data
+        )
 
 
 class MyAreaView(APIView):
