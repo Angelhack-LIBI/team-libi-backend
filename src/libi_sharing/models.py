@@ -19,6 +19,11 @@ class Sharing(BaseModel):
     goal_price = models.IntegerField()
     sharing_type = models.IntegerField()
 
+    def create_sharing(self, kwargs) -> models.Model:
+        sharing = self.model(**kwargs)
+        sharing.save(using=self._db)
+        return sharing
+
 
 class Category(BaseModel):
     title = models.CharField(max_length=200)

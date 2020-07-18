@@ -12,7 +12,8 @@ from libi_sharing.serializers import (
     SharingListItemSerializer,
     SharingCreateRequestSerializer,
     SharingDetailItemSerializer,
-)
+    SharingApplyDetailSerializer)
+from libi_sharing.service import create_sharing, find_sharing
 
 
 class SharingRootView(APIView):
@@ -25,18 +26,33 @@ class SharingRootView(APIView):
         }
     )
     def get(self, request: Request) -> Response:
-        pass
+        response_serializer = SharingListFilterSerializer()
+        response_serializer.is_valid(raise_exception=True)
+
+        return Response(
+            data=response_serializer.data,
+            status=status.HTTP_200_OK
+        )
 
     @swagger_auto_schema(
         operation_summary="쉐어링 등록",
         request_body=SharingCreateRequestSerializer,
         responses={
-            status.HTTP_200_OK: SharingListItemSerializer(many=True),
+            status.HTTP_200_OK: SharingDetailItemSerializer,
             status.HTTP_400_BAD_REQUEST: APIErrorSerializer,
         }
     )
-    def get(self, request: Request) -> Response:
-        pass
+    def post(self, request: Request) -> Response:
+        request_serializer = SharingCreateRequestSerializer(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+
+        new_sharing = create_sharing(**request_serializer.validated_data)
+
+        response_serializer = SharingDetailItemSerializer(new_sharing)
+        return Response(
+            data=response_serializer.data,
+            status=status.HTTP_200_OK,
+        )
 
 
 class SharingItemView(APIView):
@@ -48,10 +64,28 @@ class SharingItemView(APIView):
         }
     )
     def get(self, request: Request, sharing_id: int) -> Response:
-        pass
+        reuqest_serializer, response_serializer = None, None
+        if request.query_params.get('pk'):
+            reuqest_serializer = SharingDetailItemSerializer(data=sharing_id)
+            reuqest_serializer.is_valid(raise_exception=True)
+
+            sharing = find_sharing(reuqest_serializer.validated_data['id'])
+            response_serializer = SharingDetailItemSerializer(sharing)
+
+        return Response(
+            data=response_serializer.data,
+            status=status.HTTP_200_OK
+        )
 
 
 class SharingApplyView(APIView):
+    @swagger_auto_schema(
+        operation_summary="쉐어링 지원 상세 조회",
+        response={
+            status.HTTP_200_OK: SharingApplyDetailSerializer,
+            status.HTTP_404_NOT_FOUND: APIErrorSerializer,
+        }
+    )
     def get(self, request: Request, sharing_id: int) -> Response:
         pass
 

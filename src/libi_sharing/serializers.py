@@ -9,7 +9,7 @@ from libi_sharing.models import (
     Sharing,
     SharingType,
     SharingOption,
-)
+    SharingPhoto, SharingApply)
 
 
 class AreaSerializer(serializers.ModelSerializer):
@@ -45,10 +45,14 @@ class SharingListItemSerializer(serializers.ModelSerializer):
     option = serializers.SerializerMethodField(read_only=True, help_text='쉐어링 대표 옵션')
 
     def get_thumbnail_url(self, obj: Sharing) -> str:
-        pass
+        photo_object = SharingPhoto.objects.get(sharing=obj)
+        if photo_object:
+            return SharingDetailItemSerializer(photo_object).data
 
     def get_option(self, obj: Sharing) -> SharingOptionSerializer:
-        pass
+        option_object = SharingOption.objects.get(sharing=obj)
+        if option_object:
+            return SharingOptionSerializer(option_object).data
 
 
 class SharingCreateRequestSerializer(StatelessSerializer):
@@ -77,3 +81,9 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
             if url:
                 urls.append(url)
         return urls
+
+
+class SharingApplyDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SharingApply
+        fields = ('id', 'sharing', 'sharing_option', 'apply_account', 'apply_price')
