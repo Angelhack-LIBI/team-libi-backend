@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from libi_common.serializers import APIErrorSerializer
-from libi_sharing.models import Sharing, Area, Category
+from libi_sharing.models import Sharing, Area, Category, SharingApply, SharingOption
 from libi_sharing.serializers import (
     AreaSerializer,
     CategorySerializer,
@@ -13,8 +13,8 @@ from libi_sharing.serializers import (
     SharingListItemSerializer,
     SharingCreateRequestSerializer,
     SharingDetailItemSerializer,
-    SharingApplyDetailSerializer)
-from libi_sharing.service import create_sharing, find_sharing
+    SharingApplyDetailSerializer, SharingApplySerializer)
+from libi_sharing.service import create_sharing
 
 
 class SharingRootView(APIView):
@@ -78,17 +78,34 @@ class SharingItemView(APIView):
 
 class SharingApplyView(APIView):
     @swagger_auto_schema(
-        operation_summary="쉐어링 지원 상세 조회",
+        operation_summary="공동구매 apply",
+        request_body=SharingApplySerializer,
         response={
             status.HTTP_200_OK: SharingApplyDetailSerializer,
             status.HTTP_404_NOT_FOUND: APIErrorSerializer,
         }
     )
-    def get(self, request: Request, sharing_id: int) -> Response:
-        pass
+    def post(self, request: Request, sharing_id: int) -> Response:
+        request_serializer = SharingApplySerializer(data=request.data)
+        request_serializer.is_valid(raise_exception=True)
+        amount_number = request_serializer.data.get('number')
+        sharing = Sharing.objects.get(id=sharing_id)
+        sharing_option: SharingOption = sharing.options.first()
+        new_apply = SharingApply.objects.create(account_id=request.user.id, sharing=sharing,
+                                                sharing_option=sharing.options.first(),
+                                                apply_amount=amount_number,
+                                                apply_price=sharing_option.price * amount_number)
+        return Response(SharingApplyDetailSerializer(new_apply).data)
 
 
 class SharingContactView(APIView):
+    @swagger_auto_schema(
+        operation_summary="재고할인 연락하기",
+        response={
+            status.HTTP_200_OK: SharingApplyDetailSerializer,
+            status.HTTP_404_NOT_FOUND: APIErrorSerializer,
+        }
+    )
     def get(self, request: Request, sharing_id: int) -> Response:
         pass
 

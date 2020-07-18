@@ -74,7 +74,8 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sharing
         fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
-        read_only_fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
+        read_only_fields = (
+        'id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
 
     option = serializers.SerializerMethodField()
     photo_urls = serializers.SerializerMethodField()
@@ -92,7 +93,11 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
         return urls
 
 
+class SharingApplySerializer(StatelessSerializer):
+    number = serializers.IntegerField(min_value=1)
+
+
 class SharingApplyDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = SharingApply
-        fields = ('id', 'sharing', 'sharing_option', 'apply_account', 'apply_price')
+        fields = ('id', 'sharing', 'sharing_option', 'apply_amount', 'apply_price')
