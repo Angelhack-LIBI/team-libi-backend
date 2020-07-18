@@ -27,7 +27,7 @@ class Category(BaseModel):
 
 class SharingOption(BaseModel):
     sharing = models.ForeignKey('Sharing', related_name='options', null=True, on_delete=models.SET_NULL)
-    description = models.CharField(max_length=16,help_text='상품 판매 단위')
+    description = models.CharField(max_length=16, help_text='상품 판매 단위')
     price = models.IntegerField(help_text='상품 판매 단위당 가격')
 
 
