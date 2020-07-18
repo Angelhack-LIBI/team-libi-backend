@@ -10,7 +10,7 @@ from libi_account.errors import (
 from libi_common.oauth.models import StatelessAccount
 
 
-def create_account(phone: str, password: str) -> Account:
+def create_account(phone: str, password: str, name: str) -> Account:
     """
     신규 계정을 생성합니다
     :return: 신규 계정 인스턴스
@@ -19,7 +19,7 @@ def create_account(phone: str, password: str) -> Account:
     if Account.objects.filter(phone=phone, deleted_at=None).exists():
         raise DuplicateAccountError()
 
-    new_account = Account.objects.create_user(phone, password)
+    new_account = Account.objects.create_user(phone, password, name=name)
     return new_account
 
 

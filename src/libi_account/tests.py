@@ -16,6 +16,7 @@ class AccountRootViewTest(TestCase):
         self.account_data = {
             'phone': '01012345678',
             'password': 'password?',
+            'name': '테스트',
         }
         self.account = Account.objects.create_user(**self.account_data)
 
@@ -29,6 +30,7 @@ class AccountRootViewTest(TestCase):
         res = self.client.post(reverse('libi_account:account'), {
             'phone': self.account_data['phone'],
             'password': 'dontallowme',
+            'name': '테스트',
         })
         self.assertEqual(res.status_code, status.HTTP_409_CONFLICT)
 
@@ -39,6 +41,7 @@ class AccountRootViewTest(TestCase):
         res = self.client.post(reverse('libi_account:account'), {
             'phone': '01099998888',
             'password': 'testtest',
+            'name': '테스트',
         })
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         account_id = res.data['id']
@@ -52,6 +55,7 @@ class TokenRootViewTest(TestCase):
         self.account_data = {
             'phone': '01012345678',
             'password': 'password?',
+            'name': '테스트',
         }
         self.account = Account.objects.create_user(**self.account_data)
 
@@ -62,24 +66,28 @@ class TokenRootViewTest(TestCase):
         client = APIClient()
         res = client.post(reverse('libi_account:token'), {
             'phone': '01011112222',
+            'name': '테스트',
         })
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         res = client.post(reverse('libi_account:token'), {
             'phone': '01011112222',
             'password': '   ',
+            'name': '테스트',
         })
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         res = client.post(reverse('libi_account:token'), {
             'phone': '     ',
             'password': 'password',
+            'name': '테스트',
         })
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
         res = client.post(reverse('libi_account:token'), {
             'phone': self.account_data['phone'],
             'password': 'password',
+            'name': '테스트',
         })
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 

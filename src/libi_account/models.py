@@ -14,7 +14,7 @@ from libi_common.oauth.utils import generate_access_token
 class AccountManager(BaseUserManager):
     def create_user(self, phone: str, password=None, **kwargs) -> models.Model:
         if not phone:
-            raise ValueError('Email is required.')
+            raise ValueError('Phone is required.')
 
         user = self.model(
             phone=phone,

@@ -7,6 +7,7 @@ from libi_account.models import Account
 class AccountCreateRequestSerializer(StatelessSerializer):
     phone = serializers.CharField(required=True, max_length=16, help_text='휴대전화번호')
     password = serializers.CharField(required=True, trim_whitespace=False, help_text='비밀번호')
+    name = serializers.CharField(required=True, max_length=64, help_text='이름')
 
     def validate_phone(self, value: str):
         value = value.strip().replace('-', '')
