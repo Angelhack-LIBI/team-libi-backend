@@ -8,3 +8,7 @@ class StatelessSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         pass
+
+
+class APIErrorSerializer(StatelessSerializer):
+    detail = serializers.CharField(required=False)

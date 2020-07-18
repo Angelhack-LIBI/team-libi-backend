@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
@@ -17,10 +19,20 @@ from libi_account.service import (
     refresh_access_token,
     expire_token,
 )
+from libi_common.serializers import APIErrorSerializer
 from libi_common.utils import datetime_to_pendulum
 
 
 class AccountView(APIView):
+    @swagger_auto_schema(
+        operation_summary="신규 계정 생성",
+        request_body=AccountCreateRequestSerializer,
+        responses={
+            status.HTTP_201_CREATED: AccountSerializer,
+            status.HTTP_400_BAD_REQUEST: APIErrorSerializer,
+            status.HTTP_409_CONFLICT: APIErrorSerializer,
+        }
+    )
     def post(self, request: Request) -> Response:
         """
         계정 생성 API
@@ -37,6 +49,16 @@ class AccountView(APIView):
 
 
 class TokenView(APIView):
+    @swagger_auto_schema(
+        operation_summary="토큰 발급 (로그인)",
+        request_body=TokenCreateRequestSerializer,
+        responses={
+            status.HTTP_201_CREATED: TokenResponseSerializer,
+            status.HTTP_304_NOT_MODIFIED: TokenResponseSerializer,
+            status.HTTP_400_BAD_REQUEST: APIErrorSerializer,
+            status.HTTP_403_FORBIDDEN: APIErrorSerializer,
+        }
+    )
     def post(self, request: Request) -> Response:
         """
         토큰 발급 (로그인) API
@@ -74,6 +96,16 @@ class TokenView(APIView):
         )
         return response
 
+    @swagger_auto_schema(
+        operation_summary="토큰 갱신",
+        request_body=None,
+        responses={
+            status.HTTP_200_OK: TokenResponseSerializer,
+            status.HTTP_304_NOT_MODIFIED: TokenResponseSerializer,
+            status.HTTP_400_BAD_REQUEST: APIErrorSerializer,
+            status.HTTP_403_FORBIDDEN: APIErrorSerializer,
+        }
+    )
     def put(self, request: Request) -> Response:
         """
         토큰 갱신 API
@@ -100,6 +132,13 @@ class TokenView(APIView):
         )
         return response
 
+    @swagger_auto_schema(
+        operation_summary="토큰 만료 (로그아웃)",
+        request_body=None,
+        responses={
+            status.HTTP_204_NO_CONTENT: None,
+        }
+    )
     def delete(self, request: Request) -> Response:
         refresh_token = request.COOKIES.get('libi_refreshtoken')
         expire_token(refresh_token)
