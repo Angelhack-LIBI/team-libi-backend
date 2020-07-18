@@ -1,5 +1,6 @@
 from typing import List
 
+from django.db.models import Sum
 from rest_framework import serializers
 
 from libi_account.models import Account
@@ -56,7 +57,25 @@ class SharingListItemSerializer(serializers.ModelSerializer):
         return photo.file.url
 
     def get_attributes(self, obj: Sharing) -> SharingListAttributeSerializer(many=True):
-        pass
+        if obj.sharing_type == SharingType.FUNDING:
+            min_price = obj.options.first().price
+            sum_price = obj.applies.aggregate(Sum('apply_price')).get('apply_price__sum') or 0
+            ratio = int((sum_price / obj.goal_price) * 100) if 0 < sum_price else 0
+            return SharingListAttributeSerializer([
+                dict(title='최소 주문금액', content=f"{min_price:,}원", is_focused=True),
+                dict(title='목표달성률', content=f'{ratio}%', is_focused=100 <= ratio)
+            ], many=True).data
+
+        if obj.sharing_type == SharingType.STOCKSALE:
+            price = obj.options.first().price
+            return SharingListAttributeSerializer([
+                dict(title='희망금액', content=f"{price:,}원", is_focused=True)
+            ], many=True).data
+
+        if obj.sharing_type == SharingType.AD:
+            return SharingListAttributeSerializer([
+                dict(title='by', content="스폰서 광고", is_focused=True)
+            ], many=True).data
 
 
 class SharingCreateRequestSerializer(StatelessSerializer):

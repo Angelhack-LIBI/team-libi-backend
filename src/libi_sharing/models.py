@@ -8,6 +8,7 @@ from libi_common.models import BaseModel, ImageMixin
 class SharingType(IntEnum):
     FUNDING = 1  # 공구
     STOCKSALE = 2  # 재고할인
+    AD = 3  # 광고
 
 
 class Sharing(BaseModel):
@@ -47,7 +48,7 @@ class SharingPhoto(BaseModel, ImageMixin):
 
 class SharingApply(BaseModel):
     account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
-    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL, related_name='applies')
     sharing_option = models.ForeignKey('SharingOption', null=True, on_delete=models.SET_NULL)
     apply_amount = models.IntegerField(help_text='구매 수량')
     apply_price = models.IntegerField(help_text='구매 합산 총액')
