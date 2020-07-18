@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from libi_common.serializers import APIErrorSerializer
+from libi_sharing.models import Sharing, Area
 from libi_sharing.serializers import (
     AreaSerializer,
     CategorySerializer,
@@ -26,8 +27,11 @@ class SharingRootView(APIView):
         }
     )
     def get(self, request: Request) -> Response:
-        response_serializer = SharingListFilterSerializer()
-        response_serializer.is_valid(raise_exception=True)
+        """
+        list Sharing items
+        """
+        queryset = Sharing.objects.all()
+        response_serializer = SharingListItemSerializer(queryset, many=True)
 
         return Response(
             data=response_serializer.data,
@@ -35,7 +39,7 @@ class SharingRootView(APIView):
         )
 
     @swagger_auto_schema(
-        operation_summary="쉐어링 등록",
+        operation_summary="쉐어링 등록 (form-data로 보내야 함)",
         request_body=SharingCreateRequestSerializer,
         responses={
             status.HTTP_200_OK: SharingDetailItemSerializer,
@@ -43,10 +47,12 @@ class SharingRootView(APIView):
         }
     )
     def post(self, request: Request) -> Response:
+        """
+        create Sharing
+        """
         request_serializer = SharingCreateRequestSerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
-
-        new_sharing = create_sharing(**request_serializer.validated_data)
+        new_sharing = create_sharing(**request_serializer.validated_data, created_account_id=request.user.id)
 
         response_serializer = SharingDetailItemSerializer(new_sharing)
         return Response(
@@ -105,7 +111,7 @@ class MyAreaView(APIView):
     )
     def get(self, request: Request) -> Response:
         # 더미로 위치 정보를 받는 척 하고, 현재 area를 돌려주는 API
-        pass
+        return Response(AreaSerializer(Area.objects.get(id=1)).data)
 
 
 class CategoryView(APIView):

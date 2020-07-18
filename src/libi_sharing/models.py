@@ -19,11 +19,6 @@ class Sharing(BaseModel):
     goal_price = models.IntegerField()
     sharing_type = models.IntegerField()
 
-    def create_sharing(self, kwargs) -> models.Model:
-        sharing = self.model(**kwargs)
-        sharing.save(using=self._db)
-        return sharing
-
 
 class Category(BaseModel):
     title = models.CharField(max_length=200)
@@ -32,9 +27,8 @@ class Category(BaseModel):
 
 class SharingOption(BaseModel):
     sharing = models.ForeignKey('Sharing', related_name='options', null=True, on_delete=models.SET_NULL)
-    description = models.CharField(max_length=16)
-    minimum_price = models.IntegerField(default=0)
-    price = models.IntegerField()
+    description = models.CharField(max_length=16,help_text='상품 판매 단위')
+    price = models.IntegerField(help_text='상품 판매 단위당 가격')
 
 
 class AreaGroup(BaseModel):

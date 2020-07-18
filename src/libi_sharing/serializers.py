@@ -25,14 +25,14 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class SharingListFilterSerializer(StatelessSerializer):
-    area_id = serializers.IntegerField(required=True, help_text='지역 코드')
+    area_id = serializers.IntegerField(required=True, help_text='지역 코드(개발 서버에서는 1로 고정)')
     keyword = serializers.CharField(required=False, help_text='검색 키워드')
 
 
 class SharingOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SharingOption
-        fields = ('id', 'description', 'minimum_price', 'price')
+        fields = ('id', 'description', 'price')
 
 
 class SharingListItemSerializer(serializers.ModelSerializer):
@@ -45,12 +45,11 @@ class SharingListItemSerializer(serializers.ModelSerializer):
     option = serializers.SerializerMethodField(read_only=True, help_text='쉐어링 대표 옵션')
 
     def get_thumbnail_url(self, obj: Sharing) -> str:
-        photo_object = SharingPhoto.objects.get(sharing=obj)
-        if photo_object:
-            return SharingDetailItemSerializer(photo_object).data
+        photo: SharingPhoto = obj.photos.first()
+        return photo.file.url
 
     def get_option(self, obj: Sharing) -> SharingOptionSerializer:
-        option_object = SharingOption.objects.get(sharing=obj)
+        option_object = obj.options.first()
         if option_object:
             return SharingOptionSerializer(option_object).data
 
@@ -64,6 +63,7 @@ class SharingCreateRequestSerializer(StatelessSerializer):
     description = serializers.CharField(required=True, help_text='상품 상세 설명')
     option_description = serializers.CharField(required=True, max_length=14, help_text='상품 판매 단위')
     option_price = serializers.IntegerField(required=True, help_text='상품 판매 단위당 가격')
+    photo = serializers.ListField(child=serializers.ImageField(), allow_empty=False, min_length=1, max_length=10)
 
 
 class SharingDetailItemSerializer(serializers.ModelSerializer):
@@ -76,6 +76,7 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
 
     def get_photo_urls(self, obj: Sharing) -> List[str]:
         urls = []
+        print(obj.photos)
         for photo in obj.photos.filter(deleted_at=None).all():
             url = photo.file.url if getattr(photo, 'file', None) else ''
             if url:
