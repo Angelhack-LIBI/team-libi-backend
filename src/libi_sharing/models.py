@@ -19,7 +19,7 @@ class Category(BaseModel):
 
 
 class SharingOption(BaseModel):
-    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL, related_name='sharing')
     description = models.CharField(max_length=16)
     minimum_price = models.IntegerField(default=0)
     price = models.IntegerField()
