@@ -1,4 +1,3 @@
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
@@ -34,9 +33,6 @@ class AccountView(APIView):
         }
     )
     def post(self, request: Request) -> Response:
-        """
-        계정 생성 API
-        """
         serializer = AccountCreateRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -60,9 +56,6 @@ class TokenView(APIView):
         }
     )
     def post(self, request: Request) -> Response:
-        """
-        토큰 발급 (로그인) API
-        """
         if request.user.id:
             # 이미 인증되어 있는 경우 자신의 토큰을 반환
             response_serializer = TokenResponseSerializer(data={'access_token': request.access_token})
@@ -107,9 +100,6 @@ class TokenView(APIView):
         }
     )
     def put(self, request: Request) -> Response:
-        """
-        토큰 갱신 API
-        """
         if request.user.id:
             # 이미 인증되어 있는 경우 자신의 토큰을 반환
             response_serializer = TokenResponseSerializer(data={'access_token': request.access_token})
