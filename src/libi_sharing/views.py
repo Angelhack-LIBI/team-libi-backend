@@ -70,16 +70,8 @@ class SharingItemView(APIView):
         }
     )
     def get(self, request: Request, sharing_id: int) -> Response:
-        reuqest_serializer, response_serializer = None, None
-        if request.query_params.get('pk'):
-            reuqest_serializer = SharingDetailItemSerializer(data=sharing_id)
-            reuqest_serializer.is_valid(raise_exception=True)
-
-            sharing = find_sharing(reuqest_serializer.validated_data['id'])
-            response_serializer = SharingDetailItemSerializer(sharing)
-
         return Response(
-            data=response_serializer.data,
+            data=SharingDetailItemSerializer(Sharing.objects.get(id=sharing_id)).data,
             status=status.HTTP_200_OK
         )
 
