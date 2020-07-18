@@ -5,6 +5,7 @@ from libi_sharing.models import (
     Area,
     Category,
     Sharing,
+    SharingType,
     SharingOption
 )
 
@@ -46,3 +47,14 @@ class SharingListItemSerializer(serializers.ModelSerializer):
 
     def get_option(self, obj: Sharing) -> SharingOptionSerializer:
         pass
+
+
+class SharingCreateRequestSerializer(StatelessSerializer):
+    sharing_type = serializers.ChoiceField(required=True, choices=[t.value for t in SharingType], help_text='쉐어링 유형')
+    area_id = serializers.IntegerField(required=True, help_text='지역 코드')
+    title = serializers.CharField(required=True, max_length=200, help_text='상품명')
+    category_id = serializers.IntegerField(required=True, help_text='카테고리 id')
+    goal_price = serializers.IntegerField(required=False, default=0, min_value=0, help_text='목표 금액')
+    description = serializers.CharField(required=True, help_text='상품 상세 설명')
+    option_description = serializers.CharField(required=True, max_length=14, help_text='상품 판매 단위')
+    option_price = serializers.IntegerField(required=True, help_text='상품 판매 단위당 가격')

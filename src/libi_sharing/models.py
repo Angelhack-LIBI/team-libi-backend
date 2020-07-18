@@ -1,6 +1,13 @@
+from enum import IntEnum
+
 from django.db import models
 
 from libi_common.models import BaseModel, ImageMixin
+
+
+class SharingType(IntEnum):
+    FUNDING = 1  # 공구
+    STOCKSALE = 2  # 재고할인
 
 
 class Sharing(BaseModel):

@@ -10,7 +10,6 @@ from .views import (
 app_name = LibiSharingConfig.name
 
 """
-쉐어링 등록
 쉐어링 상세
 쉐어링 참여
 쉐어링 연락처
