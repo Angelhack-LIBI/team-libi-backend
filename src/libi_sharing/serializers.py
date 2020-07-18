@@ -38,7 +38,7 @@ class SharingOptionSerializer(serializers.ModelSerializer):
 class SharingListAttributeSerializer(StatelessSerializer):
     title = serializers.CharField(required=True, help_text='쉐어링 특성 부제')
     content = serializers.CharField(required=True, help_text='쉐어링 특성 내용')
-    is_focused = serializers.BooleanField(required=True, default=False, help_text='쉐어링 특성 하이라이트 여부')
+    is_focused = serializers.BooleanField(default=False, help_text='쉐어링 특성 하이라이트 여부')
 
 
 class SharingListItemSerializer(serializers.ModelSerializer):
