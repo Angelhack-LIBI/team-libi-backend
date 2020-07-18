@@ -29,6 +29,8 @@ class CategorySerializer(serializers.ModelSerializer):
 class SharingListFilterSerializer(StatelessSerializer):
     area_id = serializers.IntegerField(required=True, help_text='지역 코드(개발 서버에서는 1로 고정)')
     keyword = serializers.CharField(required=False, help_text='검색 키워드')
+    size = serializers.IntegerField(default=20, help_text='페이지 당 항목 개수')
+    last_id = serializers.IntegerField(default=0, help_text='마지막으로 불러온 항목의 id')
 
 
 class SharingOptionSerializer(serializers.ModelSerializer):
