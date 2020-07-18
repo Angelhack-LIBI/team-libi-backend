@@ -83,7 +83,7 @@ class SharingApplyView(APIView):
     @swagger_auto_schema(
         operation_summary="공동구매 apply",
         request_body=SharingApplySerializer,
-        response={
+        responses={
             status.HTTP_200_OK: SharingApplyDetailSerializer,
             status.HTTP_404_NOT_FOUND: APIErrorSerializer,
         }
@@ -98,13 +98,16 @@ class SharingApplyView(APIView):
                                                 sharing_option=sharing.options.first(),
                                                 apply_amount=amount_number,
                                                 apply_price=sharing_option.price * amount_number)
-        return Response(SharingApplyDetailSerializer(new_apply).data)
+        return Response(
+            data=SharingApplyDetailSerializer(new_apply).data,
+            status=status.HTTP_200_OK
+        )
 
 
 class SharingContactView(APIView):
     @swagger_auto_schema(
         operation_summary="재고할인 연락하기",
-        response={
+        responses={
             status.HTTP_200_OK: SharingContactUserSerializer,
             status.HTTP_404_NOT_FOUND: APIErrorSerializer,
         }
@@ -112,7 +115,8 @@ class SharingContactView(APIView):
     def get(self, request: Request, sharing_id: int) -> Response:
         user = Sharing.objects.get(id=sharing_id).created_account
         return Response(
-            SharingContactUserSerializer(user).data
+            data=SharingContactUserSerializer(user).data,
+            status=status.HTTP_200_OK
         )
 
 
