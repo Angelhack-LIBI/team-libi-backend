@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.request import Request
@@ -30,9 +31,15 @@ class SharingRootView(APIView):
         """
         list Sharing items
         """
-        queryset = Sharing.objects.all()
-        response_serializer = SharingListItemSerializer(queryset, many=True)
+        request_serializer = SharingListFilterSerializer(data=request.query_params)
+        request_serializer.is_valid(raise_exception=True)
 
+        queryset = Sharing.objects
+        if request_serializer.validated_data['last_id'] > 0:
+            queryset = queryset.filter(id__lt=request_serializer.validated_data['last_id'])
+        queryset = queryset.order_by('-id').all()[:request_serializer.validated_data['size']]
+
+        response_serializer = SharingListItemSerializer(queryset, many=True)
         return Response(
             data=response_serializer.data,
             status=status.HTTP_200_OK
