@@ -35,7 +35,9 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'drf_yasg',
+]
 SERVICE_APPS = [
     'libi_account',
     'libi_sharing',

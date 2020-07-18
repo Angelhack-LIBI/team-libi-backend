@@ -14,7 +14,7 @@ from libi_common.oauth.utils import generate_access_token
 class AccountManager(BaseUserManager):
     def create_user(self, phone: str, password=None, **kwargs) -> models.Model:
         if not phone:
-            raise ValueError('Email is required.')
+            raise ValueError('Phone is required.')
 
         user = self.model(
             phone=phone,
@@ -53,8 +53,8 @@ class Account(BaseModel, AbstractBaseUser, PermissionsMixin):
 
 class AccountToken(SimpleBaseModel):
     # Token Configuration
-    REFRESH_TOKEN_EXPIRE_TIME = {'year': 1}
-    ACCESS_TOKEN_EXPIRE_TIME = {'hour': 1}
+    REFRESH_TOKEN_EXPIRE_TIME = {'years': 1}
+    ACCESS_TOKEN_EXPIRE_TIME = {'hours': 1}
 
     account = models.ForeignKey('Account', on_delete=models.CASCADE, help_text='토큰 발급 계정')
     refresh_token = models.CharField(max_length=43, unique=True, help_text="RefreshToken")
