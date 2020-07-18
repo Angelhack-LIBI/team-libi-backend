@@ -121,3 +121,14 @@ class TokenRootViewTest(TestCase):
         token_payload = extract_access_token(access_token)
         self.assertIsInstance(extract_access_token(access_token), TokenPayload)
         self.assertEqual(token_payload.account.id, self.account.id)
+
+    def test_delete_token(self):
+        account_token = AccountToken.factory(self.account.id)
+        account_token.save()
+
+        client = APIClient()
+        client.cookies = SimpleCookie({'libi_refreshtoken': account_token.refresh_token})
+
+        res = client.delete(reverse('libi_account:token'))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
