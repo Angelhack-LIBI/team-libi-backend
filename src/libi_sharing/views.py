@@ -11,6 +11,7 @@ from libi_sharing.serializers import (
     SharingListFilterSerializer,
     SharingListItemSerializer,
     SharingCreateRequestSerializer,
+    SharingDetailItemSerializer,
 )
 
 
@@ -35,6 +36,28 @@ class SharingRootView(APIView):
         }
     )
     def get(self, request: Request) -> Response:
+        pass
+
+
+class SharingItemView(APIView):
+    @swagger_auto_schema(
+        operation_summary="쉐어링 상세 조회",
+        responses={
+            status.HTTP_200_OK: SharingDetailItemSerializer,
+            status.HTTP_404_NOT_FOUND: APIErrorSerializer,
+        }
+    )
+    def get(self, request: Request, sharing_id: int) -> Response:
+        pass
+
+
+class SharingApplyView(APIView):
+    def get(self, request: Request, sharing_id: int) -> Response:
+        pass
+
+
+class SharingContactView(APIView):
+    def get(self, request: Request, sharing_id: int) -> Response:
         pass
 
 

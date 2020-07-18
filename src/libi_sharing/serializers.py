@@ -1,3 +1,5 @@
+from typing import List
+
 from rest_framework import serializers
 
 from libi_common.serializers import StatelessSerializer
@@ -6,7 +8,7 @@ from libi_sharing.models import (
     Category,
     Sharing,
     SharingType,
-    SharingOption
+    SharingOption,
 )
 
 
@@ -58,3 +60,20 @@ class SharingCreateRequestSerializer(StatelessSerializer):
     description = serializers.CharField(required=True, help_text='상품 상세 설명')
     option_description = serializers.CharField(required=True, max_length=14, help_text='상품 판매 단위')
     option_price = serializers.IntegerField(required=True, help_text='상품 판매 단위당 가격')
+
+
+class SharingDetailItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sharing
+        fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'photo_urls')
+        read_only_fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'photo_urls')
+
+    photo_urls = serializers.SerializerMethodField()
+
+    def get_photo_urls(self, obj: Sharing) -> List[str]:
+        urls = []
+        for photo in obj.photos.filter(deleted_at=None).all():
+            url = photo.file.url if getattr(photo, 'file', None) else ''
+            if url:
+                urls.append(url)
+        return urls

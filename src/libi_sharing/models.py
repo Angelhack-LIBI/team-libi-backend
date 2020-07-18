@@ -26,7 +26,7 @@ class Category(BaseModel):
 
 
 class SharingOption(BaseModel):
-    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    sharing = models.ForeignKey('Sharing', related_name='options', null=True, on_delete=models.SET_NULL)
     description = models.CharField(max_length=16)
     minimum_price = models.IntegerField(default=0)
     price = models.IntegerField()
@@ -43,7 +43,7 @@ class Area(BaseModel):
 
 class SharingPhoto(BaseModel, ImageMixin):
     FILE_UPLOAD_PATH = 'sharing_photo'
-    sharing = models.ForeignKey('Sharing', null=True, on_delete=models.SET_NULL)
+    sharing = models.ForeignKey('Sharing', null=True, related_name='photos', on_delete=models.SET_NULL)
 
 
 class SharingApply(BaseModel):
