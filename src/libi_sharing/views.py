@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from libi_common.serializers import APIErrorSerializer
-from libi_sharing.models import Sharing, Area
+from libi_sharing.models import Sharing, Area, Category
 from libi_sharing.serializers import (
     AreaSerializer,
     CategorySerializer,
@@ -122,4 +122,4 @@ class CategoryView(APIView):
         }
     )
     def get(self, request: Request) -> Response:
-        pass
+        return Response(CategorySerializer(Category.objects.all(), many=True).data)
