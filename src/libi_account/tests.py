@@ -84,12 +84,17 @@ class TokenRootViewTest(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_token_generate(self):
+        """
+        토큰 정상 발급 테스트
+        """
         client = APIClient()
         res = client.post(reverse('libi_account:token'), self.account_data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
         access_token = res.data.get('access_token', '')
-        refresh_token = res.cookies.get('libi_refreshtoken', '')
+        refresh_token_cookie = res.cookies.get('libi_refreshtoken', None)
+        self.assertIsNotNone(refresh_token_cookie)
+        refresh_token = refresh_token_cookie.value
         self.assertGreater(len(access_token), 1)
         self.assertGreater(len(refresh_token), 1)
 
@@ -101,6 +106,9 @@ class TokenRootViewTest(TestCase):
         self.assertTrue(token_row_exists)
 
     def test_token_refresh(self):
+        """
+        토큰 Refresh 테스트
+        """
         account_token = AccountToken.factory(self.account.id)
         account_token.save()
 
@@ -123,6 +131,9 @@ class TokenRootViewTest(TestCase):
         self.assertEqual(token_payload.account.id, self.account.id)
 
     def test_delete_token(self):
+        """
+        토큰 만료 (로그아웃) 테스트
+        """
         account_token = AccountToken.factory(self.account.id)
         account_token.save()
 
@@ -130,5 +141,4 @@ class TokenRootViewTest(TestCase):
         client.cookies = SimpleCookie({'libi_refreshtoken': account_token.refresh_token})
 
         res = client.delete(reverse('libi_account:token'))
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
