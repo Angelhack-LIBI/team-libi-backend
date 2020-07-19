@@ -14,16 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.contrib import admin
 from django.conf.urls.static import static
+from django.contrib import admin
 from django.urls import path, include
 
 import libi_account.urls as account_urls
 import libi_sharing.urls as sharing_urls
-
+from libi.views import IndexView
 from libi_common.meta_views import api_document
 
 urlpatterns = [
+    path('', IndexView.as_view(), name='index'),
     path('admin/', admin.site.urls),
     path('account/', include(account_urls, namespace='account_v1')),
     path('sharing/', include(sharing_urls, namespace='sharing_v1')),
