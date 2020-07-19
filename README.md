@@ -1,32 +1,30 @@
 # Team LIBI - Backend
-![](https://img.shields.io/docker/cloud/build/2minchul/libi-backend) ![](https://img.shields.io/badge/license-MIT-green) 
-![](https://img.shields.io/github/issues-pr-closed/Angelhack-LIBI/team-libi-backend) ![](https://img.shields.io/github/issues-pr-raw/Angelhack-LIBI/team-libi-backend)  
-AngelHack 2020 팀 LIBI 서비스 Backend  
-**Demo API URL:** https://libi-backend-2minchul.endpoint.ainize.ai/  
-Repository : https://github.com/Angelhack-LIBI  
-API Docs : https://libi-backend-2minchul.endpoint.ainize.ai/docs/  
-Ainize Swagger Docs : https://ainize.ai/2minchul/libi-backend  
-이슈 관리 : https://trello.com/b/CkuMrfPh/libi-qa
-
 
 [![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=github.com/Angelhack-LIBI/team-libi-backend)
 
-## Skills
-### FrontEnd
-* React
-### BackEnd
+![](https://img.shields.io/docker/cloud/build/2minchul/libi-backend) ![](https://img.shields.io/badge/license-MIT-green) 
+![](https://img.shields.io/github/issues-pr-closed/Angelhack-LIBI/team-libi-backend) ![](https://img.shields.io/github/issues-pr-raw/Angelhack-LIBI/team-libi-backend)  
+
+AngelHack 2020 해커톤 LIBI팀 백엔드  
+우리동네 소상공인 공동구매 플랫폼 : 사이
+
+**Demo API URL:** https://libi-backend-2minchul.endpoint.ainize.ai  
+Docs : https://ainize.ai/2minchul/libi-backend  
+이슈 관리 : https://trello.com/b/CkuMrfPh/libi-qa
+
+![](https://i.imgur.com/eLA7G8Q.png)
+**매우 신선한 코드임을 보장합니다**
+
+## Stack
 * Python 3.8
 * Django 3.x
 * SQLite
-### DevOps
-#### CI/CD
-Docker + Ainize
 
 ## Models
 ![erd](https://i.imgur.com/NQdar4t.png)
 
+## Features
 
-## 기능
 ### Account(계정)
 * 로그인
 * 회원가입
