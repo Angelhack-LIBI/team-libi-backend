@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Iterable, Optional
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import transaction
@@ -16,25 +16,26 @@ def create_sharing(sharing_type: int, area_id: int, title: str, category_id: int
     :rtype: Sharing
     """
     with transaction.atomic():
-        new_sharing = Sharing.objects.create(title=title, description=description, area_id=area_id, category_id=category_id,
-                                             created_account_id=created_account_id, goal_price=goal_price,
-                                             sharing_type=sharing_type)
+        new_sharing = Sharing.objects.create(
+            title=title, description=description, area_id=area_id, category_id=category_id,
+            created_account_id=created_account_id, goal_price=goal_price, sharing_type=sharing_type
+        )
         SharingOption.objects.create(sharing=new_sharing, description=option_description, price=option_price)
         for f in photo:
             SharingPhoto.objects.create(file=f, sharing=new_sharing)
     return new_sharing
 
 
-def find_sharing(pk: int) -> Sharing:
+def get_sharing(pk: int, select_related: Optional[Iterable[str]] = None) -> Sharing:
     """
     이미 존재하는 sharing 찾기
     :return: 찾은 sharing 인스턴스
     :rtype: Sharing
     """
-    sharing = Sharing.objects.filter(
-        id=pk,
-        deleted_at=None
-    ).first()
+    queryset = Sharing.objects.filter(id=pk, deleted_at=None)
+    if select_related:
+        queryset = Sharing.objects.select_related(*select_related)
+    sharing = queryset.first()
     if not sharing:
         raise NotExistSharingError()
 

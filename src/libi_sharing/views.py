@@ -16,7 +16,7 @@ from libi_sharing.serializers import (
     SharingCreateRequestSerializer,
     SharingDetailItemSerializer,
     SharingApplyDetailSerializer, SharingApplySerializer, SharingContactUserSerializer)
-from libi_sharing.service import create_sharing
+from libi_sharing.service import create_sharing, get_sharing
 
 
 class SharingRootView(APIView):
@@ -81,7 +81,7 @@ class SharingItemView(APIView):
     )
     def get(self, request: Request, sharing_id: int) -> Response:
         return Response(
-            data=SharingDetailItemSerializer(Sharing.objects.get(id=sharing_id)).data,
+            data=SharingDetailItemSerializer(get_sharing(sharing_id)).data,
             status=status.HTTP_200_OK
         )
 
@@ -99,7 +99,7 @@ class SharingApplyView(APIView):
         request_serializer = SharingApplySerializer(data=request.data)
         request_serializer.is_valid(raise_exception=True)
         amount_number = request_serializer.data.get('number')
-        sharing = Sharing.objects.get(id=sharing_id)
+        sharing = get_sharing(sharing_id)
         sharing_option: SharingOption = sharing.options.first()
         new_apply = SharingApply.objects.create(account_id=request.user.id, sharing=sharing,
                                                 sharing_option=sharing.options.first(),
@@ -120,7 +120,7 @@ class SharingContactView(APIView):
         }
     )
     def get(self, request: Request, sharing_id: int) -> Response:
-        user = Sharing.objects.get(id=sharing_id).created_account
+        user = get_sharing(sharing_id).created_account
         return Response(
             data=SharingContactUserSerializer(user).data,
             status=status.HTTP_200_OK
