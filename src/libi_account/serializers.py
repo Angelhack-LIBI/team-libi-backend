@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from libi_common.serializers import StatelessSerializer
 from libi_account.models import Account
+from libi_common.serializers import StatelessSerializer
 
 
 class AccountCreateRequestSerializer(StatelessSerializer):
