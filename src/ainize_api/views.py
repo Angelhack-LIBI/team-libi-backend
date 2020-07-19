@@ -18,3 +18,10 @@ class DockerWebhookView(APIView):
         return Response(
             status=status.HTTP_200_OK
         )
+
+    def post(self, request: Request) -> Response:
+        print(request.query_params)
+        print(request.data)
+        return Response(
+            status=status.HTTP_200_OK
+        )
