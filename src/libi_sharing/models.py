@@ -18,7 +18,7 @@ class Sharing(BaseModel):
     category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
     created_account = models.ForeignKey('libi_account.Account', null=True, on_delete=models.SET_NULL)
     goal_price = models.IntegerField()
-    sharing_type = models.IntegerField()
+    sharing_type = models.IntegerField(db_index=True)
 
 
 class Category(BaseModel):
