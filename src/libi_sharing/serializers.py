@@ -95,15 +95,17 @@ class SharingCreateRequestSerializer(StatelessSerializer):
 class SharingDetailItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sharing
-        fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
-        read_only_fields = (
-            'id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option', 'photo_urls')
+        fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description', 'option',
+                  'photo_urls', 'achievement')
+        read_only_fields = ('id', 'title', 'sharing_type', 'category_id', 'goal_price', 'description',
+                            'option', 'photo_urls', 'achievement')
 
     option = serializers.SerializerMethodField()
     photo_urls = serializers.SerializerMethodField()
+    achievement = serializers.SerializerMethodField()
 
     def get_option(self, obj: Sharing) -> SharingOptionSerializer:
-        pass
+        return SharingOptionSerializer(obj.options.first()).data
 
     def get_photo_urls(self, obj: Sharing) -> List[str]:
         urls = []
@@ -112,6 +114,10 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
             if url:
                 urls.append(url)
         return urls
+
+    def get_achievement(self, obj: Sharing):
+        sum_price = obj.applies.aggregate(Sum('apply_price')).get('apply_price__sum') or 0
+        return int((sum_price / obj.goal_price) * 100) if 0 < sum_price else 0
 
 
 class SharingApplySerializer(StatelessSerializer):
