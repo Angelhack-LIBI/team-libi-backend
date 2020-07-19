@@ -2,10 +2,15 @@
 ![](https://img.shields.io/docker/cloud/build/2minchul/libi-backend) ![](https://img.shields.io/badge/license-MIT-green) 
 ![](https://img.shields.io/github/issues-pr-closed/Angelhack-LIBI/team-libi-backend) ![](https://img.shields.io/github/issues-pr-raw/Angelhack-LIBI/team-libi-backend)  
 AngelHack 2020 팀 LIBI 서비스 Backend  
+**Demo API URL:** https://libi-backend-2minchul.endpoint.ainize.ai/  
 Repository : https://github.com/Angelhack-LIBI  
 API Docs : https://libi-backend-2minchul.endpoint.ainize.ai/docs/  
-Ainize Docs : https://ainize.ai/2minchul/libi-backend  
+Ainize Swagger Docs : https://ainize.ai/2minchul/libi-backend  
 이슈 관리 : https://trello.com/b/CkuMrfPh/libi-qa
+
+
+[![Run on Ainize](https://ainize.ai/static/images/run_on_ainize_button.svg)](https://ainize.web.app/redirect?git_repo=github.com/Angelhack-LIBI/team-libi-backend)
+
 ## Skills
 ### FrontEnd
 * React
