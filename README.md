@@ -1,7 +1,7 @@
 # Team LIBI - Backend
 ![](https://img.shields.io/docker/cloud/build/2minchul/libi-backend) ![](https://img.shields.io/badge/license-MIT-green) 
 ![](https://img.shields.io/github/issues-pr-closed/Angelhack-LIBI/team-libi-backend) ![](https://img.shields.io/github/issues-pr-raw/Angelhack-LIBI/team-libi-backend)  
-AngelHack 2020 팀 LIBI 서비스 Backend
+AngelHack 2020 팀 LIBI 서비스 Backend  
 Repository : https://github.com/Angelhack-LIBI  
 API Docs : https://libi-backend-2minchul.endpoint.ainize.ai/docs/  
 Ainize Docs : https://ainize.ai/2minchul/libi-backend  
