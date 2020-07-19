@@ -102,7 +102,7 @@ class SharingDetailItemSerializer(serializers.ModelSerializer):
 
     option = serializers.SerializerMethodField()
     photo_urls = serializers.SerializerMethodField()
-    achievement = serializers.SerializerMethodField()
+    achievement = serializers.SerializerMethodField(help_text="목표 달성률")
 
     def get_option(self, obj: Sharing) -> SharingOptionSerializer:
         return SharingOptionSerializer(obj.options.first()).data
