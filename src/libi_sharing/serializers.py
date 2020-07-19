@@ -134,3 +134,8 @@ class SharingApplyDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = SharingApply
         fields = ('id', 'sharing', 'sharing_option', 'apply_amount', 'apply_price')
+
+
+class MyAreaQueryStringSerializer(StatelessSerializer):
+    lat = serializers.CharField(required=False, help_text='위도')
+    long = serializers.CharField(required=False, help_text='경도')

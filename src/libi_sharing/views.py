@@ -1,3 +1,4 @@
+import requests
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
@@ -14,7 +15,7 @@ from libi_sharing.serializers import (
     SharingListItemSerializer,
     SharingCreateRequestSerializer,
     SharingDetailItemSerializer,
-    SharingApplyDetailSerializer, SharingApplySerializer, SharingContactUserSerializer)
+    SharingApplyDetailSerializer, SharingApplySerializer, SharingContactUserSerializer, MyAreaQueryStringSerializer)
 from libi_sharing.service import create_sharing, get_sharing
 
 
@@ -138,14 +139,29 @@ class SharingContactView(APIView):
 class MyAreaView(APIView):
     @swagger_auto_schema(
         operation_summary="내 지역 조회",
+        query_serializer=MyAreaQueryStringSerializer,
         responses={
             status.HTTP_200_OK: AreaSerializer,
             status.HTTP_404_NOT_FOUND: APIErrorSerializer,
         }
     )
     def get(self, request: Request) -> Response:
-        # 더미로 위치 정보를 받는 척 하고, 현재 area를 돌려주는 API
-        return Response(AreaSerializer(Area.objects.get(id=1)).data)
+        try:
+            request_serializer = MyAreaQueryStringSerializer(data=request.query_params)
+            request_serializer.is_valid(raise_exception=True)
+
+            response: dict = requests.get(
+                "https://dapi.kakao.com/v2/local/geo/coord2address.json",
+                params={'x': request_serializer.data.get('long'), 'y': request_serializer.data.get('lat'), },
+                headers={
+                    'Authorization': 'KakaoAK 326e38503f420e1f0088dab1f46dc0c7',
+                    'KA': 'sdk/4.2.0 os/javascript lang/ko-KR device/Win32 origin/https%3A%2F%2Fapis.map.kakao.com'
+                }
+            ).json()
+            address = response['documents'][0]['address']
+            return Response({'id': 1, 'name': f'{address["region_1depth_name"]} {address["region_2depth_name"]}'})
+        except:
+            return Response(AreaSerializer(Area.objects.get(id=1)).data)
 
 
 class CategoryView(APIView):
