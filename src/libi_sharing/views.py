@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
@@ -34,11 +33,20 @@ class SharingRootView(APIView):
         """
         request_serializer = SharingListFilterSerializer(data=request.query_params)
         request_serializer.is_valid(raise_exception=True)
+        validated_data = request_serializer.validated_data
 
         queryset = Sharing.objects
-        if request_serializer.validated_data['last_id'] > 0:
-            queryset = queryset.filter(id__lt=request_serializer.validated_data['last_id'])
-        queryset = queryset.order_by('-id').all()[:request_serializer.validated_data['size']]
+
+        if validated_data.get('area_id'):
+            queryset = queryset.filter(area_id=validated_data['area_id'])
+
+        if validated_data.get('keyword'):
+            keyword = validated_data['keyword']
+            queryset = queryset.filter(title__contains=keyword)
+
+        if validated_data['last_id'] > 0:
+            queryset = queryset.filter(id__lt=validated_data['last_id'])
+        queryset = queryset.order_by('-id').all()[:validated_data['size']]
 
         response_serializer = SharingListItemSerializer(queryset, many=True)
         return Response(
