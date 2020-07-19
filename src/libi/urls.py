@@ -14,13 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.contrib import admin
 from django.conf.urls.static import static
+from django.contrib import admin
 from django.urls import path, include
 
+import ainize_api.urls as ainize_api_urls
 import libi_account.urls as account_urls
 import libi_sharing.urls as sharing_urls
-
 from libi_common.meta_views import api_document
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     path('account/', include(account_urls, namespace='account_v1')),
     path('sharing/', include(sharing_urls, namespace='sharing_v1')),
     path('docs/', api_document()),
+    path('api/ainize/', include(ainize_api_urls, namespace='ainize_api')),
 ]
 
 if settings.DEBUG:
