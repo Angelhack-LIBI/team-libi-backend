@@ -1,1 +1,0 @@
-[{"model": "libi_sharing.areagroup", "pk": 1, "fields": {"created_at": null, "updated_at": null, "deleted_at": null, "name": "\uc11c\uc6b8"}}, {"model": "libi_sharing.area", "pk": 1, "fields": {"created_at": null, "updated_at": null, "deleted_at": null, "group": 1, "name": "\uc11c\uc6b8 \uac15\ub0a8\uad6c"}}]
