@@ -1,5 +1,8 @@
+gunicorn==20.0.4; platform_system != "Windows"
 django==3.0.8
 djangorestframework==3.11.0
 pendulum==2.1.1
 pyjwt==1.7.1
 Pillow==7.2.0
+drf-yasg==1.17.1
+sentry-sdk==0.16.1
