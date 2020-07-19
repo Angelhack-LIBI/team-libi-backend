@@ -12,7 +12,18 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+import sentry_sdk
 from corsheaders.defaults import default_headers
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://acffd1c95c894318812bc6a0f0f924bd@o342398.ingest.sentry.io/5347200",
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -125,6 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Rest Framework
 REST_FRAMEWORK = {
@@ -146,9 +158,10 @@ MEDIA_URL = '/media/'
 
 # CORS Configuration
 
-CORS_ALLOW_HEADERS = default_headers + (
-    'x-authorization',
-)
+CORS_ALLOW_METHODS = ['*']
+CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_CREDENTIALS = True
+CORS_EXPOSE_HEADERS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True  # DO NOT USE THIS IN PRODUCTION
-CORS_ORIGIN_WHITELIST = ()
+
+# CORS_ORIGIN_WHITELIST = ()

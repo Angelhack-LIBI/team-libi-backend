@@ -7,7 +7,6 @@ from libi_account.errors import (
     NotExistAccountError,
     NotExistTokenError,
 )
-from libi_common.oauth.models import StatelessAccount
 
 
 def create_account(phone: str, password: str, name: str) -> Account:
