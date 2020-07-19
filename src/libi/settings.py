@@ -158,9 +158,7 @@ MEDIA_URL = '/media/'
 
 # CORS Configuration
 
-CORS_ALLOW_HEADERS = default_headers + (
-    'x-authorization',
-)
+CORS_ALLOW_HEADERS = ['*']
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True  # DO NOT USE THIS IN PRODUCTION
 CORS_ORIGIN_WHITELIST = ()
