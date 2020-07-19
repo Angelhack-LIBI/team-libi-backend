@@ -15,4 +15,4 @@ ADD ./gunicorn_conf.py /app/gunicorn_conf.py
 EXPOSE 80
 
 # Exec
-CMD gunicorn -c "/app/gunicorn_conf.py" "libi_api:app"
+CMD gunicorn -c "/app/gunicorn_conf.py" "libi:app"
