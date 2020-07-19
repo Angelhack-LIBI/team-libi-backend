@@ -28,7 +28,7 @@ urlpatterns = [
     path('account/', include(account_urls, namespace='account_v1')),
     path('sharing/', include(sharing_urls, namespace='sharing_v1')),
     path('docs/', api_document()),
-    path('api/ainize/', include(ainize_api_urls, namespace='ainize_api')),
+    path('ainize-api/echo/', include(ainize_api_urls, namespace='ainize_api')),
 ]
 
 if settings.DEBUG:
