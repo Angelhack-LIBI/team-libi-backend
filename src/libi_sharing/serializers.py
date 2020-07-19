@@ -64,8 +64,8 @@ class SharingListItemSerializer(serializers.ModelSerializer):
             sum_price = obj.applies.aggregate(Sum('apply_price')).get('apply_price__sum') or 0
             ratio = int((sum_price / obj.goal_price) * 100) if 0 < sum_price else 0
             return SharingListAttributeSerializer([
-                dict(title='최소 주문금액', content=f"{min_price:,}원", is_focused=True),
-                dict(title='목표달성률', content=f'{ratio}%', is_focused=100 <= ratio)
+                dict(title='단위금액', content=f"{min_price:,}원", is_focused=True),
+                dict(title='달성률', content=f'{ratio}%', is_focused=100 <= ratio)
             ], many=True).data
 
         if obj.sharing_type == SharingType.STOCKSALE:
